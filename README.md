@@ -1,6 +1,6 @@
 # AI chatbot evals: a practice support bot tested in a real browser
 
-![Who checks the chatbot? I followed every citation it gave me](docs/banner.jpg)
+![Can you trust your chatbot's sources? I checked every citation](docs/banner.jpg)
 
 ![Vibium](https://img.shields.io/badge/browser%20automation-Vibium-f05a28)
 ![MCP](https://img.shields.io/badge/protocol-MCP-e8408a)
