@@ -1,5 +1,7 @@
 # AI chatbot evals: a practice support bot tested in a real browser
 
+![I tried Vibium, then I made it QA a chatbot](docs/banner.jpg)
+
 A small practice space (part of my "Ahsan with AI" experiments) for evaluating a customer-support chatbot in a real browser.
 
 **Qavio Support** is a support assistant for a made-up product called Qavio. The layout follows the look of McKay Wrigley's chatbot-ui (dark sidebar, chat history, model selector, message actions); the code here is written from scratch.
@@ -10,6 +12,8 @@ Two notes in `kb.md` are out of date on purpose, so the checks have something re
 
 - the free plan note says "unlimited projects", while `help/pricing.html` says 3 projects
 - the export note cites `help/export-guide.html`, a page that no longer exists
+
+![Qavio Support answering with reasoning and numbered sources](docs/chatbot.jpg)
 
 ## Run it
 
@@ -32,6 +36,10 @@ python3 checks/run_checks.py
 
 My run: 7 prompts, 28 checks, 24 passed, 4 failed. Three failures come from the two stale notes (wrong free-plan answer, its quote missing from the page, the dead link). The fourth was not planted: the model quoted a sentence that is not word for word on the pricing page.
 
+![Following a citation to a help page that does not exist](docs/citation-check.jpg)
+
+![24 of 28 checks passed](docs/scorecard.jpg)
+
 Because a real model answers, results can differ from run to run.
 
 ## Judge the answers with Codex and store scores in Langfuse
@@ -43,5 +51,7 @@ LANGFUSE_HOST=http://localhost:3000
 LANGFUSE_INIT_PROJECT_PUBLIC_KEY=pk-lf-...
 LANGFUSE_INIT_PROJECT_SECRET_KEY=sk-lf-...
 ```
+
+![Judge scores in the local Langfuse](docs/langfuse-scores.jpg)
 
 My run wrote 7 traces and 21 scores. Langfuse's built-in LLM-as-a-Judge evaluators were not used, because they need a model API key.
