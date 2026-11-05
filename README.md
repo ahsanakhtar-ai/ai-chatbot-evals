@@ -10,7 +10,9 @@
 ![Python](https://img.shields.io/badge/python-3.9%2B-3776ab)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-A small practice space (part of my "Ahsan with AI" experiments) for evaluating a customer-support chatbot the way a user would see it: in a real browser.
+**Built by [Ahsan Akhtar](https://github.com/ahsanakhtar-ai)** as part of my "Ahsan with AI" experiments.
+
+Most chatbot evals read the model's text. This one checks what the user actually sees: it opens the chatbot in a real browser, asks questions, and follows every citation to see if it holds up.
 
 It answers three questions about a chatbot reply:
 
@@ -28,6 +30,7 @@ It answers three questions about a chatbot reply:
 - [Judge with Codex, store in Langfuse](#judge-with-codex-store-in-langfuse)
 - [Project structure](#project-structure)
 - [Limits and honest notes](#limits-and-honest-notes)
+- [Author](#author)
 - [License](#license)
 
 ## What is in here
@@ -136,6 +139,14 @@ docs/                   images for this README
 - A real model answers and judges, so results can differ from run to run.
 - Relevance and multi-turn checks are not implemented.
 - The checks match quotes word for word, which is strict by design.
+
+## Author
+
+**Ahsan Akhtar** builds and tests AI agents in public under "Ahsan with AI".
+
+- GitHub: [@ahsanakhtar-ai](https://github.com/ahsanakhtar-ai)
+- If this was useful, a star on the repo helps other people find it.
+- Found a case the checks miss? Open an issue, I would like to see it.
 
 ## License
 
