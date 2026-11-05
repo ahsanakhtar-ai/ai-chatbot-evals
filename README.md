@@ -1,6 +1,6 @@
-# Ahsan with AI: practice support chatbot
+# AI chatbot evals: a practice support bot tested in a real browser
 
-A small practice space for testing a customer-support chatbot in a real browser.
+A small practice space (part of my "Ahsan with AI" experiments) for evaluating a customer-support chatbot in a real browser.
 
 **Qavio Support** is a support assistant for a made-up product called Qavio. The layout follows the look of McKay Wrigley's chatbot-ui (dark sidebar, chat history, model selector, message actions); the code here is written from scratch.
 
