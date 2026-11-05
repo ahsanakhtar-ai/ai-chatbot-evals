@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qavio Support | Ahsan with AI</title>
+<style>
+  :root { --side:#171717; --main:#212121; --panel:#2f2f2f; --line:#3a3a3a; --text:#ececec; --muted:#a3a3a3; --brand:#14b8a6; --brand2:#22d3ee; --user:#303030; }
+  * { box-sizing:border-box; }
+  html, body { height:100%; }
+  body { margin:0; background:var(--main); color:var(--text); font:15px/1.6 "Inter", -apple-system, "Segoe UI", Roboto, sans-serif; display:flex; }
+  button { font:inherit; color:inherit; cursor:pointer; }
+  aside { width:260px; background:var(--side); padding:12px; display:flex; flex-direction:column; gap:4px; flex-shrink:0; transition:margin-left .2s; }
+  body.collapsed aside { margin-left:-260px; }
+  .space { font-size:11px; font-weight:700; letter-spacing:0.12em; color:var(--muted); padding:6px 10px 8px; }
+  .new { display:flex; align-items:center; gap:10px; background:transparent; border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-weight:600; margin-bottom:10px; text-align:left; }
+  .new:hover, .item:hover { background:#262626; }
+  .hist { color:var(--muted); font-size:12px; font-weight:600; padding:10px 10px 4px; }
+  .item { padding:9px 10px; border-radius:8px; font-size:14px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:#d4d4d4; }
+  .item.active { background:#262626; color:#fff; }
+  .side-foot { margin-top:auto; border-top:1px solid var(--line); padding:10px; display:flex; flex-direction:column; gap:8px; }
+  .side-foot label { font-size:11px; font-weight:700; letter-spacing:0.1em; color:var(--muted); }
+  select { background:var(--panel); color:var(--text); border:1px solid var(--line); border-radius:8px; padding:8px 10px; font:inherit; }
+  .me { display:flex; align-items:center; gap:10px; font-size:14px; }
+  .me .av { background:#525252; }
+  main { flex:1; display:flex; flex-direction:column; min-width:0; }
+  .top { display:flex; align-items:center; gap:12px; padding:10px 18px; border-bottom:1px solid var(--line); }
+  .icon-btn { background:transparent; border:0; border-radius:8px; padding:6px 9px; color:var(--muted); font-size:18px; }
+  .icon-btn:hover { background:var(--panel); color:var(--text); }
+  .top h1 { font-size:16px; margin:0; font-weight:650; flex:1; }
+  .badge { font-size:11px; font-weight:700; letter-spacing:0.08em; color:var(--brand2); border:1px solid #155e63; border-radius:999px; padding:4px 11px; }
+  #messages { flex:1; overflow-y:auto; padding:22px 22px 6px; }
+  .wrap { max-width:780px; margin:0 auto; display:flex; flex-direction:column; gap:18px; }
+  .welcome { text-align:center; padding:34px 0 0; }
+  .logo { width:54px; height:54px; border-radius:16px; background:linear-gradient(135deg, var(--brand), var(--brand2)); display:grid; place-items:center; color:#04201e; font-weight:900; font-size:26px; margin:0 auto 14px; }
+  .welcome h2 { font-size:30px; letter-spacing:-0.02em; margin:0 0 6px; }
+  .welcome p { color:var(--muted); margin:0; }
+  .chips { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:24px; }
+  .chip { text-align:left; background:transparent; border:1px solid var(--line); border-radius:14px; padding:13px 15px; font-weight:550; color:#e5e5e5; }
+  .chip:hover { background:var(--panel); }
+  .row { display:flex; gap:12px; align-items:flex-start; }
+  .row.user { flex-direction:row-reverse; }
+  .av { width:32px; height:32px; border-radius:10px; display:grid; place-items:center; font-weight:800; font-size:14px; flex-shrink:0; }
+  .av.bot { background:linear-gradient(135deg, var(--brand), var(--brand2)); color:#04201e; }
+  .av.user { background:#525252; }
+  .msg { max-width:80%; font-size:16px; }
+  .msg.user { background:var(--user); padding:10px 16px; border-radius:18px; }
+  .msg.bot { padding-top:3px; }
+  details.reasoning { margin:0 0 8px; border-left:2px solid var(--line); padding-left:12px; color:var(--muted); font-size:13.5px; }
+  details.reasoning summary { cursor:pointer; font-weight:600; color:#c4c4c4; list-style:none; }
+  details.reasoning summary::before { content:"\25B8  "; }
+  details.reasoning[open] summary::before { content:"\25BE  "; }
+  details.reasoning ol { margin:6px 0 2px; padding-left:18px; }
+  .answer { margin:0; }
+  sup.cite a { display:inline-block; margin-left:4px; padding:0 6px; border-radius:6px; background:#134e4a; color:#99f6e4; font-weight:700; font-size:11px; text-decoration:none; }
+  ol.sources { list-style:none; margin:10px 0 0; padding:0; display:flex; flex-direction:column; gap:6px; }
+  ol.sources li { border:1px solid var(--line); border-radius:10px; padding:7px 11px; font-size:13px; color:var(--muted); }
+  ol.sources .num { display:inline-block; min-width:20px; font-weight:800; color:var(--brand2); }
+  ol.sources a { color:var(--text); font-weight:600; }
+  .handoff { margin-top:10px; display:inline-block; font-size:12px; font-weight:800; letter-spacing:0.06em; color:#fde68a; border:1px solid #92400e; background:#3b2507; border-radius:8px; padding:5px 10px; }
+  .actions { display:flex; gap:4px; margin-top:8px; }
+  .actions button { background:transparent; border:0; border-radius:6px; padding:3px 8px; color:var(--muted); font-size:12.5px; }
+  .actions button:hover { background:var(--panel); color:var(--text); }
+  .dots span { display:inline-block; width:7px; height:7px; margin-right:4px; border-radius:50%; background:var(--muted); animation:blink 1.2s infinite; }
+  .dots span:nth-child(2) { animation-delay:.2s; } .dots span:nth-child(3) { animation-delay:.4s; }
+  @keyframes blink { 0%, 80%, 100% { opacity:.25; } 40% { opacity:1; } }
+  .thinking { color:var(--muted); font-size:14px; }
+  .composer { padding:8px 22px 6px; }
+  form { max-width:780px; margin:0 auto; display:flex; align-items:center; gap:8px; background:var(--panel); border-radius:26px; padding:7px 7px 7px 20px; }
+  #prompt { flex:1; border:0; outline:0; font:inherit; font-size:16px; background:transparent; color:var(--text); padding:8px 0; }
+  #send { font-weight:800; border:0; border-radius:999px; padding:9px 18px; background:#fff; color:#111; }
+  #send:disabled { opacity:.4; }
+  .fine { text-align:center; color:var(--muted); font-size:12px; padding:0 0 10px; margin:8px 0 0; }
+  @media (max-width:760px) { aside { position:fixed; z-index:5; height:100%; } body:not(.open) aside { margin-left:-260px; } .chips { grid-template-columns:1fr; } .msg { max-width:92%; } }
+</style>
+</head>
+<body>
+<aside>
+  <div class="space">AHSAN WITH AI</div>
+  <button class="new" type="button" id="new-chat">+ New chat</button>
+  <div class="hist">Today</div>
+  <div class="item active">Help with my Qavio account</div>
+  <div class="hist">Previous 7 days</div>
+  <div class="item">Moving a project to a new team</div>
+  <div class="item">Invoice for last month</div>
+  <div class="side-foot">
+    <label for="model">MODEL</label>
+    <select id="model" aria-label="Model"><option>Codex (codex exec)</option></select>
+    <div class="me"><div class="av user">A</div>Ahsan</div>
+  </div>
+</aside>
+<main>
+  <div class="top">
+    <button class="icon-btn" type="button" id="toggle" aria-label="Toggle sidebar">&#9776;</button>
+    <h1>Qavio Support</h1>
+    <span class="badge">PRACTICE CHATBOT</span>
+  </div>
+  <div id="messages" role="log" aria-live="polite">
+    <div class="wrap" id="wrap">
+      <div class="welcome" id="welcome">
+        <div class="logo">Q</div>
+        <h2>Hi, I am Qavio Support</h2>
+        <p>Ask about plans, billing, exports or your account. I answer from the help center and show my sources.</p>
+        <div class="chips" id="chips" aria-label="Suggested prompts"></div>
+      </div>
+    </div>
+  </div>
+  <div class="composer">
+    <form id="chat-form" autocomplete="off">
+      <input id="prompt" name="prompt" placeholder="Message Qavio Support" aria-label="Your question">
+      <button id="send" type="submit">Send</button>
+    </form>
+    <p class="fine">Practice space. Qavio is a made-up product; answers come from a real model reading practice notes, two of which are out of date on purpose.</p>
+  </div>
+</main>
+<script>
+  var SUGGESTED = ["How much does Qavio Pro cost?", "How many projects are on the free plan?", "Which formats can I export my tasks to?", "What is your refund policy?"];
+  var turn = 0, busy = false;
+  var box = document.getElementById("messages"), wrap = document.getElementById("wrap");
+  function el(tag, cls, text) { var e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; }
+  function render(n, data) {
+    var row = el("div", "row"); row.appendChild(el("div", "av bot", "Q"));
+    var b = el("div", "msg bot"); b.id = "answer-" + n; b.setAttribute("data-turn", n);
+    if (data.reasoning && data.reasoning.length) {
+      var d = el("details", "reasoning"); d.open = true;
+      d.appendChild(el("summary", "", "Reasoned for " + (data.seconds || "a few") + "s"));
+      var ol = el("ol"); data.reasoning.forEach(function (s) { ol.appendChild(el("li", "", s)); }); d.appendChild(ol); b.appendChild(d);
+    }
+    var p = el("p", "answer"); p.appendChild(el("span", "answer-text", data.answer || ""));
+    (data.citations || []).forEach(function (c, i) {
+      var sup = el("sup", "cite"); var a = el("a", "", String(i + 1)); a.href = "#src-" + n + "-" + (i + 1); a.setAttribute("data-cite", i + 1); sup.appendChild(a); p.appendChild(sup);
+    });
+    b.appendChild(p);
+    if (data.citations && data.citations.length) {
+      var src = el("ol", "sources");
+      data.citations.forEach(function (c, i) {
+        var li = el("li"); li.id = "src-" + n + "-" + (i + 1);
+        li.appendChild(el("span", "num", String(i + 1)));
+        var a = el("a", "source-link", c.title || c.url); a.href = c.url; li.appendChild(a);
+        li.appendChild(document.createTextNode(" ")); li.appendChild(el("q", "source-quote", c.quote || ""));
+        src.appendChild(li);
+      });
+      b.appendChild(src);
+    }
+    if (data.escalate) { var h = el("div", "handoff", "HANDED TO A HUMAN AGENT"); h.id = "handoff-" + n; b.appendChild(h); }
+    var act = el("div", "actions"); ["Copy", "Good", "Bad", "Regenerate"].forEach(function (t) { var x = el("button", "", t); x.type = "button"; act.appendChild(x); }); b.appendChild(act);
+    row.appendChild(b); wrap.appendChild(row); box.scrollTop = box.scrollHeight;
+  }
+  function ask(q) {
+    q = q.trim(); if (!q || busy) return;
+    busy = true; document.getElementById("send").disabled = true;
+    var w = document.getElementById("welcome"); if (w) w.remove();
+    turn++; var n = turn;
+    var ur = el("div", "row user"); ur.appendChild(el("div", "av user", "A")); var u = el("div", "msg user", q); u.setAttribute("data-turn", n); ur.appendChild(u); wrap.appendChild(ur);
+    var tr = el("div", "row"); tr.id = "typing-" + n; tr.appendChild(el("div", "av bot", "Q"));
+    var th = el("div", "msg bot thinking"); th.innerHTML = '<span class="dots"><span></span><span></span><span></span></span> Thinking'; tr.appendChild(th); wrap.appendChild(tr);
+    box.scrollTop = box.scrollHeight;
+    fetch("/api/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: q }) })
+      .then(function (r) { return r.json(); })
+      .catch(function () { return { answer: "Sorry, I could not reach the model.", citations: [], reasoning: [] }; })
+      .then(function (data) { tr.remove(); render(n, data); busy = false; document.getElementById("send").disabled = false; });
+  }
+  var chips = document.getElementById("chips");
+  SUGGESTED.forEach(function (s) { var c = el("button", "chip", s); c.type = "button"; c.addEventListener("click", function () { ask(s); }); chips.appendChild(c); });
+  document.getElementById("chat-form").addEventListener("submit", function (ev) { ev.preventDefault(); var i = document.getElementById("prompt"); ask(i.value); i.value = ""; });
+  document.getElementById("new-chat").addEventListener("click", function () { location.reload(); });
+  document.getElementById("toggle").addEventListener("click", function () { document.body.classList.toggle("collapsed"); document.body.classList.toggle("open"); });
+</script>
+</body>
+</html>
